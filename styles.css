@@ -1,0 +1,848 @@
+/* ARIA, mi escritorio: styles.css
+   Los bloques siguen el mismo orden que los widgets de script.js.
+   Para quitar un widget, borra su bloque de aqui. */
+
+/* ========================================================================
+   BLOQUE 1: TEMA Y BASE
+   Colores como variables (:root) con modo claro y oscuro, reset (*), html y body.
+   ======================================================================== */
+
+:root {
+  --mat: #bcd4c5;
+  --grid: #a9c4b4;
+  --paper: #fbfbf8;
+  --ink: #1d2433;
+  --mut: #5f6872;
+  --line: #d6d9d2;
+  --acc: #2547c9;
+  --hl: #ffe14d;
+  --ok: #1f8a5b;
+  --bad: #c8372d;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --mat: #17302a;
+    --grid: #1f3d35;
+    --paper: #222629;
+    --ink: #e8ecf1;
+    --mut: #a3abb3;
+    --line: #3a4046;
+    --acc: #8aa4ff;
+    --ok: #4cc38a;
+    --bad: #ef7b72;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --mat: #17302a;
+  --grid: #1f3d35;
+  --paper: #222629;
+  --ink: #e8ecf1;
+  --mut: #a3abb3;
+  --line: #3a4046;
+  --acc: #8aa4ff;
+  --ok: #4cc38a;
+  --bad: #ef7b72;
+  color-scheme: dark;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  background:
+    var(--mat) linear-gradient(var(--grid) 1px, transparent 1px) 0 0/28px 28px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/28px 28px;
+  font:
+    15px/1.45 "Schibsted Grotesk",
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+}
+/* ========================================================================
+   BLOQUE 2: CABECERA, BOTONES Y CAMPOS BASE
+   header, h1, utilidades (.sp .mut .bad), button, .on .sel, input y select.
+   ======================================================================== */
+header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 18px;
+  flex-wrap: wrap;
+}
+h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+.sp {
+  flex: 1;
+}
+.mut {
+  color: var(--mut);
+}
+.bad {
+  color: var(--bad);
+  margin: 4px 0;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+button:hover {
+  background: var(--hl);
+  color: #1d2433;
+}
+button.p,
+.on {
+  background: var(--acc);
+  color: #fff;
+  border-color: var(--acc);
+}
+.sel {
+  background: var(--hl);
+  color: #1d2433;
+  font-weight: 600;
+}
+input,
+select {
+  font: inherit;
+  color: inherit;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 8px;
+  max-width: 100%;
+}
+/* ========================================================================
+   BLOQUE 3: ESCRITORIO Y VENTANAS DE WIDGET
+   #cfg (ajustes), #desk, .w (ventana), .wh (barra de titulo), .wb (contenido), .rz (asa de tamano), .row (fila flexible).
+   ======================================================================== */
+#cfg {
+  padding: 0 18px;
+}
+#desk {
+  position: relative;
+}
+.w {
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  box-shadow: 4px 4px 0 var(--ink);
+  overflow: hidden;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.wh {
+  cursor: grab;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-bottom: 1.5px solid var(--ink);
+  background: var(--hl);
+  color: #1d2433;
+  font-weight: 700;
+}
+.wh button {
+  background: transparent;
+  border-color: transparent;
+  color: #1d2433;
+}
+.wb {
+  padding: 14px;
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+  container-type: inline-size;
+}
+.rz {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 22px;
+  height: 22px;
+  cursor: nwse-resize;
+  touch-action: none;
+  background: linear-gradient(
+    135deg,
+    transparent 48%,
+    var(--ink) 48%,
+    var(--ink) 58%,
+    transparent 58%,
+    transparent 72%,
+    var(--ink) 72%,
+    var(--ink) 82%,
+    transparent 82%
+  );
+}
+
+@container (max-width:520px) {
+  .dc {
+    min-height: 56px;
+    font-size: 11px;
+    padding: 2px;
+  }
+  .et {
+    display: none;
+  }
+  .ev {
+    padding: 0 2px;
+    text-align: center;
+  }
+}
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+/* ========================================================================
+   BLOQUE 4: WIDGET CALENDARIO, FORMULARIOS Y ETIQUETAS
+   .cal .dh .dc .ev (calendario), .form .chip .tg (formularios y etiquetas), .rm (recordatorios).
+   ======================================================================== */
+.cal {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+.dh {
+  text-align: center;
+  color: var(--mut);
+  font-size: 13px;
+}
+.dc {
+  min-height: 78px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+}
+.dc:hover {
+  border-color: var(--ink);
+}
+.dc.td b {
+  background: var(--hl);
+  color: #1d2433;
+  padding: 0 5px;
+  border-radius: 3px;
+  align-self: flex-start;
+}
+.ev {
+  border-left: 3px solid var(--c);
+  background: color-mix(in srgb, var(--c) 24%, transparent);
+  border-radius: 3px;
+  padding: 1px 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.form {
+  border: 1.5px dashed var(--mut);
+  border-radius: 6px;
+  padding: 10px;
+  margin: 12px 0;
+}
+.chip {
+  border-radius: 99px;
+  padding: 2px 10px;
+  font-size: 13px;
+}
+.tg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 6px 0;
+}
+.rm {
+  border-left: 4px solid var(--c);
+  padding: 6px 10px;
+  margin: 8px 0;
+  background: color-mix(in srgb, var(--c) 10%, transparent);
+  border-radius: 3px;
+}
+/* ========================================================================
+   BLOQUE 5: WIDGET GRAFICO PERSONAL
+   .goal .score .bars .bc .dots .dot .pb
+   ======================================================================== */
+.goal {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px;
+  margin: 12px 0;
+}
+.score {
+  margin: 8px 0;
+}
+.score span {
+  font-size: 30px;
+  font-weight: 700;
+}
+.bars {
+  display: flex;
+  gap: 6px;
+  margin: 8px 0;
+}
+.bc {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2px;
+  height: 112px;
+  font-size: 12px;
+}
+.bc i {
+  width: 70%;
+  max-width: 30px;
+  min-height: 2px;
+  background: var(--acc);
+  border-radius: 3px 3px 0 0;
+}
+.dots {
+  display: flex;
+  gap: 6px;
+  margin: 8px 0;
+}
+.dot {
+  flex: 1;
+  text-align: center;
+  padding: 6px 0;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  color: var(--mut);
+}
+.dot.ok {
+  background: var(--ok);
+  color: #fff;
+  border-color: var(--ok);
+}
+.pb {
+  flex: 1;
+  height: 8px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  overflow: hidden;
+}
+.pb i {
+  display: block;
+  height: 100%;
+  background: var(--ok);
+}
+/* ========================================================================
+   BLOQUE 6: WIDGET RELOJ
+   .big (numero grande).
+   ======================================================================== */
+.big {
+  font-size: clamp(32px, 14cqi, 72px);
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  margin: 10px 0;
+}
+/* ========================================================================
+   BLOQUE 7: WIDGET CALIFICACIONES
+   .gr .gn (filas), #gr-box (grafica SVG), .lg (leyenda).
+   ======================================================================== */
+.gr {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 3px 0;
+  border-top: 1px solid var(--line);
+}
+.gn {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#gr-box {
+  margin: 8px 0;
+}
+#gr-box svg {
+  display: block;
+}
+#gr-box .gl {
+  stroke: var(--line);
+}
+#gr-box text {
+  fill: var(--mut);
+  font-size: 11px;
+}
+#gr-box .gv {
+  fill: var(--ink);
+}
+#gr-box .gg {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+}
+#gr-box .gd {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+#gr-box .ok {
+  fill: var(--ok);
+}
+#gr-box .no {
+  fill: var(--bad);
+}
+.lg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 12px;
+}
+.lg i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+/* ========================================================================
+   BLOQUE 8: POST-ITS FLOTANTES
+   #pits (capa por encima de todo), .pt .pw .pn, .ni (lista), .cd (puntos de color), .nx (botones discretos).
+   ======================================================================== */
+#pits {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  z-index: 20;
+}
+.pt {
+  cursor: grab;
+  touch-action: none;
+}
+.pw {
+  position: absolute;
+  width: 210px;
+  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.25));
+  transform: rotate(var(--r));
+}
+.pn {
+  position: relative;
+  background: var(--pc);
+  color: #2b2a26;
+  padding: 8px 10px 12px;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    0 100%
+  );
+}
+.pn::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(315deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.06));
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+.pn input,
+.pn textarea {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.18);
+  border-radius: 0;
+  color: inherit;
+  padding: 3px 0;
+  font: inherit;
+}
+.pn textarea {
+  field-sizing: content;
+  min-height: 4.4em;
+  resize: vertical;
+  border-bottom: 0;
+}
+.pn .ti {
+  font-weight: 700;
+}
+.pn input::placeholder,
+.pn textarea::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+.ni {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.ni input[type="checkbox"] {
+  width: auto;
+  flex: none;
+}
+.ni .dn {
+  text-decoration: line-through;
+  opacity: 0.55;
+}
+.cd {
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+}
+.cd.cur {
+  outline: 2px solid #2b2a26;
+  outline-offset: 1px;
+}
+.nx {
+  background: transparent;
+  border: 0;
+  color: #2b2a26;
+  opacity: 0.45;
+  padding: 0 4px;
+  font-size: 12px;
+}
+.nx:hover {
+  opacity: 1;
+  background: transparent;
+}
+/* ========================================================================
+   BLOQUE 9: WIDGET KANBAN
+   .kb .kcol .kh .kc .kt .ka
+   ======================================================================== */
+.kb {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+@container (max-width:380px) {
+  .kb {
+    grid-template-columns: 1fr;
+  }
+}
+.kcol {
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  border-radius: 6px;
+  padding: 6px;
+  min-height: 80px;
+}
+.kh {
+  font-weight: 600;
+  font-size: 13px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.kh button {
+  font-size: 11px;
+  padding: 0 6px;
+}
+.kc {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--pr);
+  border-radius: 4px;
+  padding: 5px 6px;
+  margin-bottom: 6px;
+  cursor: grab;
+  font-size: 13px;
+}
+.kt {
+  overflow-wrap: anywhere;
+}
+.kt.dn {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+.ka {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 3px;
+}
+.ka button {
+  padding: 0 5px;
+  font-size: 12px;
+  border-color: transparent;
+}
+/* ========================================================================
+   BLOQUE 10: BIBLIOTECA VISUAL (sidebar)
+   #sb (estanteria), .bk .spb (libros), .bb .bi .bp (hoja que se abre), .dl .sc (documentos y secciones), .ab (anadir libro).
+   ======================================================================== */
+body {
+  --sbw: 260px;
+  padding-left: var(--sbw);
+  transition: padding-left 0.25s;
+}
+body.sbc {
+  --sbw: 46px;
+}
+#sb {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--sbw);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 10;
+  padding: calc(env(safe-area-inset-top, 0px) + 8px) 8px 12px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.07) 0 2px,
+      transparent 2px 7px
+    ),
+    #5b3f2c;
+  color: #f3e9d8;
+  box-shadow: 3px 0 8px rgba(0, 0, 0, 0.35);
+  transition: width 0.25s;
+}
+.sbh {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+#sb button {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #f3e9d8;
+}
+#sb button:hover {
+  background: var(--hl);
+  color: #1d2433;
+}
+body.sbc .sbx {
+  display: none;
+}
+.bk {
+  border-bottom: 7px solid #3b281b;
+  margin-bottom: 6px;
+  padding-bottom: 2px;
+}
+.spb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 9px 8px 9px 18px;
+  color: #fff;
+  border-radius: 3px 7px 7px 3px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 12px,
+      rgba(255, 215, 120, 0.75) 12px,
+      rgba(255, 215, 120, 0.75) 14px,
+      transparent 14px
+    ),
+    var(--bc);
+  box-shadow:
+    inset 5px 0 0 rgba(0, 0, 0, 0.25),
+    0 2px 3px rgba(0, 0, 0, 0.4);
+}
+.spb .bt {
+  flex: 1;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bb {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+.bk.open .bb {
+  grid-template-rows: 1fr;
+}
+.bi {
+  overflow: hidden;
+  min-height: 0;
+}
+.bp {
+  background: #f5efe0;
+  color: #2b2a26;
+  margin: 0 3px;
+  padding: 6px 8px;
+  border-radius: 0 0 4px 4px;
+}
+.dl,
+.sh {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+.dl {
+  cursor: pointer;
+}
+.dl span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dl:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+.dl.on {
+  background: var(--hl);
+  color: #1d2433;
+}
+.sc {
+  margin: 4px 0 4px 6px;
+  border-left: 2px solid var(--bc);
+  padding-left: 4px;
+}
+.sn {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.3);
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  padding: 0;
+}
+#sb .bp button {
+  background: transparent;
+  border-color: rgba(0, 0, 0, 0.25);
+  color: #2b2a26;
+  padding: 0 6px;
+  font-size: 12px;
+}
+#sb .bp button:hover {
+  background: var(--hl);
+}
+.bt2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+.ab {
+  margin-top: 10px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.3);
+  padding-top: 8px;
+}
+.ab input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.92);
+  color: #2b2a26;
+  margin-bottom: 6px;
+}
+.ab .sw {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.ab .cd.cur {
+  outline-color: #fff;
+}
+/* ========================================================================
+   BLOQUE 11: VISOR DE DOCUMENTOS Y PDF
+   .dv, .cdot, .fb (boton subir PDF), #pv-box (visor), .w.mx (maximizar).
+   ======================================================================== */
+.dv .dt {
+  font-size: 20px;
+  font-weight: 700;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px dashed var(--line);
+  padding: 2px 0;
+  margin: 4px 0;
+}
+.dv textarea {
+  width: 100%;
+  field-sizing: content;
+  min-height: 220px;
+  border: 0;
+  background: transparent;
+  resize: vertical;
+  font: inherit;
+  line-height: 1.6;
+  padding: 4px 0;
+}
+.cdot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+.fb {
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  padding: 0 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.fb:hover {
+  background: var(--hl);
+}
+#pv-box {
+  overflow: auto;
+  max-height: min(70vh, 760px);
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+  border-radius: 4px;
+  padding: 2px;
+  margin: 6px 0;
+}
+#pv-box canvas {
+  display: block;
+  margin: 0 auto;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.pvt button {
+  padding: 0 8px;
+}
+.w.mx {
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 15 !important;
+}
+.mx #pv-box {
+  max-height: none;
+  height: calc(100vh - 160px);
+}

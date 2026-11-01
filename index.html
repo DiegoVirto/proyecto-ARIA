@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ARIA, mi escritorio</title>
+
+  <!-- Fuente Schibsted Grotesk (si no carga, se usa la fuente del sistema) -->
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos: bloques numerados dentro de styles.css -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- BLOQUE A: Biblioteca visual (estanteria). La rellena script.js con side() -->
+  <aside id="sb"></aside>
+
+  <!-- BLOQUE B: Cabecera con botones globales (data-act = accion de la tabla A en script.js) -->
+  <header>
+    <h1>ARIA</h1>
+    <span id="dt" class="mut"></span>
+    <span class="sp"></span>
+    <button data-act="nnew">📝 Nota rápida</button>
+    <button data-act="tidy" title="Recoloca los widgets">⊞ Ordenar</button>
+    <button data-act="cfg">⚙ Ajustes</button>
+  </header>
+
+  <!-- BLOQUE C: Panel de ajustes (mostrar u ocultar widgets) -->
+  <div id="cfg"></div>
+
+  <!-- BLOQUE D: Escritorio. Aqui se dibujan los widgets abiertos -->
+  <main id="desk"></main>
+
+  <!-- BLOQUE E: Capa de post-its (siempre por encima de los widgets) -->
+  <div id="pits"></div>
+
+  <!-- Toda la logica: script.js (indice de bloques al principio del archivo) -->
+  <script src="script.js"></script>
+</body>
+</html>
