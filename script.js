@@ -1548,4 +1548,75 @@ $("#dt").textContent = new Date().toLocaleDateString("es-ES", {
   day: "numeric",
   month: "long",
 });
+/* ===== Dock IA: columna derecha reservada y desplegable ===== */
+const AIDock = (() => {
+  const KEY = 'aria:ai-dock';        // clave propia
+  const HEADER_SEL = 'header';       // selector de tu cabecera (ajústalo si hace falta)
+  const MIN = 300, MAX = 640;
+  const root = document.documentElement;
+  const dock = document.getElementById('ai-dock');
+  const btn  = document.getElementById('ai-toggle');
+  const grip = document.getElementById('ai-resize');
+
+  let st = { open: false, w: 360 };
+  try { Object.assign(st, JSON.parse(localStorage.getItem(KEY)) || {}); } catch {}
+
+  const clamp = w => Math.min(Math.max(+w || 360, MIN), MAX, root.clientWidth * .6);
+  const save  = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch {} };
+  // Recoloca los widgets cuando cambia el ancho útil (si existe layout())
+  const relayout = () => { if (typeof layout === 'function') layout(); };
+
+  function apply() {
+    st.w = clamp(st.w);
+    dock.classList.toggle('open', st.open);
+    btn.setAttribute('aria-expanded', st.open);
+    root.style.setProperty('--ai-w', st.w + 'px');
+    root.style.setProperty('--ai-cur', st.open ? st.w + 'px' : 'var(--ai-tab)');
+  }
+
+  // El dock cuelga bajo la cabecera aunque ésta se vaya con el scroll
+  let raf = 0;
+  function place() {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      const h = document.querySelector(HEADER_SEL);
+      root.style.setProperty('--ai-top', (h ? Math.max(0, h.getBoundingClientRect().bottom) : 0) + 'px');
+    });
+  }
+
+  function set(open) { st.open = !!open; apply(); save(); }
+
+  btn.addEventListener('click', () => set(!st.open));
+  dock.addEventListener('transitionend', e => {
+    if (e.target === dock && e.propertyName === 'width') relayout();
+  });
+
+  // Redimensionar arrastrando el borde izquierdo
+  grip.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    grip.setPointerCapture(e.pointerId);
+    root.classList.add('ai-dragging');
+    const move = ev => { st.w = clamp(root.clientWidth - ev.clientX); apply(); };
+    const up = () => {
+      grip.removeEventListener('pointermove', move);
+      grip.removeEventListener('pointerup', up);
+      grip.removeEventListener('pointercancel', up);
+      root.classList.remove('ai-dragging');
+      save(); relayout();
+    };
+    grip.addEventListener('pointermove', move);
+    grip.addEventListener('pointerup', up);
+    grip.addEventListener('pointercancel', up);
+  });
+
+  addEventListener('scroll', place, { passive: true });
+  addEventListener('resize', () => { apply(); place(); });
+  apply(); place();
+
+  // API para cuando conectes la IA
+  return {
+    open: () => set(true), close: () => set(false), toggle: () => set(!st.open),
+    messages: document.getElementById('ai-messages'),
+  };
+})();
 render();
