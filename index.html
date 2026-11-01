@@ -37,5 +37,26 @@
 
   <!-- Toda la logica: script.js (indice de bloques al principio del archivo) -->
   <script src="script.js"></script>
+  <!-- Dock IA: columna derecha reservada -->
+<aside id="ai-dock" class="ai-dock" aria-label="Asistente de IA">
+  <div id="ai-resize" class="ai-resize" aria-hidden="true"></div>
+
+  <button id="ai-toggle" class="ai-toggle" type="button"
+          aria-expanded="false" aria-controls="ai-panel" title="Mostrar / ocultar IA">
+    <span class="ai-arrow" aria-hidden="true">◀</span>
+    <span class="ai-label">IA</span>
+  </button>
+
+  <section id="ai-panel" class="ai-panel" aria-label="Panel de IA">
+    <div class="ai-head">Asistente</div>
+    <div id="ai-messages" class="ai-messages" role="log" aria-live="polite">
+      <p class="ai-empty">Aquí vivirá la IA.</p>
+    </div>
+    <div class="ai-input">
+      <textarea id="ai-text" rows="2" placeholder="Próximamente…" disabled></textarea>
+      <button id="ai-send" type="button" disabled>Enviar</button>
+    </div>
+  </section>
+</aside>
 </body>
 </html>
