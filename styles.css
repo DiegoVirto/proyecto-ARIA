@@ -846,3 +846,58 @@ body.sbc .sbx {
   max-height: none;
   height: calc(100vh - 160px);
 }
+/* ===== Dock IA (columna derecha reservada) ===== */
+:root{
+  --ai-tab:44px;           /* ancho plegado */
+  --ai-w:360px;            /* ancho abierto (lo actualiza el JS) */
+  --ai-cur:var(--ai-tab);  /* ancho reservado actual (JS) */
+  --ai-top:0px;            /* alto de cabecera visible (JS) */
+}
+
+/* El escritorio cede el espacio al dock */
+#desk{margin-right:var(--ai-cur);transition:margin-right .25s ease}
+
+.ai-dock{
+  position:fixed;top:var(--ai-top);right:0;bottom:0;
+  width:var(--ai-cur);z-index:15;            /* por debajo de los post-its (20) */
+  display:flex;overflow:hidden;
+  background:var(--paper,#fffdf6);color:var(--ink,#1a1a1a);
+  border-left:2px solid var(--ink,#1a1a1a);
+  box-shadow:-4px 0 0 rgba(0,0,0,.85);
+  transition:width .25s ease;
+}
+
+/* Pestaña */
+.ai-toggle{
+  flex:none;width:var(--ai-tab);display:flex;flex-direction:column;align-items:center;gap:10px;
+  padding:14px 0;border:0;background:var(--hl,#f7ff3c);color:inherit;
+  font:inherit;font-weight:700;cursor:pointer;
+}
+.ai-toggle:hover{filter:brightness(.95)}
+.ai-label{writing-mode:vertical-rl;letter-spacing:.15em}
+.ai-arrow{transition:transform .25s}
+.ai-dock.open .ai-arrow{transform:rotate(180deg)}
+
+/* Panel */
+.ai-panel{
+  flex:none;width:calc(var(--ai-w) - var(--ai-tab));
+  display:flex;flex-direction:column;border-left:2px solid var(--ink,#1a1a1a);
+  visibility:hidden;transition:visibility 0s linear .25s;   /* oculto = no enfocable */
+}
+.ai-dock.open .ai-panel{visibility:visible;transition-delay:0s}
+.ai-head{padding:10px 14px;background:var(--hl,#f7ff3c);border-bottom:2px solid var(--ink,#1a1a1a);font-weight:700}
+.ai-messages{flex:1;overflow:auto;padding:14px}
+.ai-empty{margin:0;opacity:.55}
+.ai-input{display:flex;gap:8px;padding:10px;border-top:2px solid var(--ink,#1a1a1a)}
+.ai-input textarea{flex:1;resize:none;font:inherit;padding:8px;border:2px solid var(--ink,#1a1a1a);background:#fff}
+.ai-input button{font:inherit;font-weight:700;padding:0 12px;border:2px solid var(--ink,#1a1a1a);background:var(--hl,#f7ff3c);cursor:pointer}
+.ai-input :disabled{opacity:.5;cursor:not-allowed}
+
+/* Asa de redimensionado */
+.ai-resize{display:none;position:absolute;left:0;top:0;bottom:0;width:6px;cursor:col-resize;z-index:1;touch-action:none}
+.ai-dock.open .ai-resize{display:block}
+.ai-dragging{user-select:none}
+.ai-dragging .ai-dock,.ai-dragging #desk{transition:none}
+
+/* Móvil: el panel abierto se superpone en vez de empujar el escritorio */
+@media (max-width:700px){ #desk{margin-right:var(--ai-tab)} }
